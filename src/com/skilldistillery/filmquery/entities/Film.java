@@ -5,7 +5,7 @@ public class Film {
 	private String title;
 	private String description;
 	private int releaseYear;
-	private int languageId;
+	private String language;
 	private int rentalDuration;
 	private double rentalRate;
 	private int length;
@@ -13,13 +13,13 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 
-	public Film(int id, String title, String description, int releaseYear, int languageId, int rentalDuration,
+	public Film(int id, String title, String description, int releaseYear, String language, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.releaseYear = releaseYear;
-		this.languageId = languageId;
+		this.language = language;
 		this.rentalDuration = rentalDuration;
 		this.rentalRate = rentalRate;
 		this.length = length;
@@ -60,12 +60,12 @@ public class Film {
 		this.releaseYear = releaseYear;
 	}
 
-	public int getLanguageId() {
-		return languageId;
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setLanguageId(int languageId) {
-		this.languageId = languageId;
+	public void setLanguageId(String language) {
+		this.language = language;
 	}
 
 	public int getRentalDuration() {
@@ -118,10 +118,19 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return "Film [ID: " + id + ", Title: " + title + ", Description: " + description + ", Release Year: " + releaseYear
-				+ ", Language ID: " + languageId + ", Rental Duration: " + rentalDuration + ", Rental Rate: " + rentalRate
-				+ ", Length: " + length + ", replacementCost=" + replacementCost + ", rating=" + rating
-				+ ", specialFeatures=" + specialFeatures + "]";
+		String upperTS = "Film [ID: " + id + ", Title: " + title + ", Description: " + description + ", Release Year: "
+				+ releaseYear + ", Language: " + language + ", Rental Duration: " + rentalDuration + ", Rental Rate: "
+				+ rentalRate + ", Length: " + length + ", Replacement Cost: " + replacementCost + ", Rating: " + rating
+				+ ", Special Features: " + specialFeatures + "]";
+		upperTS = upperTS.toUpperCase();
+		return upperTS;
+	}
+
+	public String userFriendlyToString() {
+		String upperUFTS = "Film [Title: " + title + ", Release Year: " + releaseYear + ", Rating: "
+				+ rating + ", Language: " + language + ", Description: " + description + "]";
+		upperUFTS = upperUFTS.toUpperCase();
+		return upperUFTS;
 	}
 
 	@Override
@@ -130,7 +139,7 @@ public class Film {
 		int result = 1;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
-		result = prime * result + languageId;
+		result = prime * result + ((language == null) ? 0 : language.hashCode());
 		result = prime * result + length;
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
 		result = prime * result + releaseYear;
@@ -161,7 +170,10 @@ public class Film {
 			return false;
 		if (id != other.id)
 			return false;
-		if (languageId != other.languageId)
+		if (language == null) {
+			if (other.language != null)
+				return false;
+		} else if (!language.equals(other.language))
 			return false;
 		if (length != other.length)
 			return false;

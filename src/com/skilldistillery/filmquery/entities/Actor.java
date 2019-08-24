@@ -73,6 +73,7 @@ public class Actor {
 		}else {
 			output += "Actor [ID: " + id + ", Name: " + fullName + "]";
 		}
+		output = output.toUpperCase();
 		return output;
 	}
 
