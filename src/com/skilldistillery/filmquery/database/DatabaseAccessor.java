@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.InventoryFilm;
 
 public interface DatabaseAccessor {
 	
@@ -14,4 +15,6 @@ public interface DatabaseAccessor {
 	public List<Actor> findActorsByFilmId(int filmId);
 	
 	public List<Film> findFilmsByKeyword(String keyword);
+	
+	public List<InventoryFilm> findAllCopiesAndConditionOfFilm(int filmId);
 }

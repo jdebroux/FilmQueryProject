@@ -12,9 +12,11 @@ public class Film {
 	private double replacementCost;
 	private String rating;
 	private String specialFeatures;
+	private String category;
 
-	public Film(int id, String title, String description, int releaseYear, String language, int rentalDuration,
-			double rentalRate, int length, double replacementCost, String rating, String specialFeatures) {
+	public Film(int id, String title, String description, int releaseYear, String category, String language,
+			int rentalDuration, double rentalRate, int length, double replacementCost, String rating,
+			String specialFeatures) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -26,6 +28,7 @@ public class Film {
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
+		this.category = category;
 	}
 
 	public int getId() {
@@ -119,16 +122,16 @@ public class Film {
 	@Override
 	public String toString() {
 		String upperTS = "Film [ID: " + id + ", Title: " + title + ", Description: " + description + ", Release Year: "
-				+ releaseYear + ", Language: " + language + ", Rental Duration: " + rentalDuration + ", Rental Rate: "
-				+ rentalRate + ", Length: " + length + ", Replacement Cost: " + replacementCost + ", Rating: " + rating
-				+ ", Special Features: " + specialFeatures + "]";
+				+ releaseYear + ", Category: " + category + ", Language: " + language + ", Rental Duration: "
+				+ rentalDuration + ", Rental Rate: " + rentalRate + ", Length: " + length + ", Replacement Cost: "
+				+ replacementCost + ", Rating: " + rating + ", Special Features: " + specialFeatures + "]";
 		upperTS = upperTS.toUpperCase();
 		return upperTS;
 	}
 
 	public String userFriendlyToString() {
-		String upperUFTS = "Film [Title: " + title + ", Release Year: " + releaseYear + ", Rating: "
-				+ rating + ", Language: " + language + ", Description: " + description + "]";
+		String upperUFTS = "Film [Title: " + title + ", Release Year: " + releaseYear + ", Rating: " + rating
+				+ ", Language: " + language + ", Description: " + description + "]";
 		upperUFTS = upperUFTS.toUpperCase();
 		return upperUFTS;
 	}
@@ -202,5 +205,4 @@ public class Film {
 			return false;
 		return true;
 	}
-
 }

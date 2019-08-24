@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.app;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import com.skilldistillery.filmquery.database.DatabaseAccessor;
 import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.InventoryFilm;
 
 public class FilmQueryApp {
 
@@ -19,17 +21,17 @@ public class FilmQueryApp {
 		app.launch();
 	}
 
-	private void test() {
-		Film film = db.findFilmById(1);
-		System.out.println(film);
-		Actor actor = db.findActorById(1);
-		System.out.println(actor);
-		List<Actor> actors = db.findActorsByFilmId(1);
-		for (Actor actor2 : actors) {
-			System.out.println(actor2);
-		}
-
-	}
+//	private void test() {
+//		Film film = db.findFilmById(1);
+//		System.out.println(film);
+//		Actor actor = db.findActorById(1);
+//		System.out.println(actor);
+//		List<Actor> actors = db.findActorsByFilmId(1);
+//		for (Actor actor2 : actors) {
+//			System.out.println(actor2);
+//		}
+//
+//	}
 
 	private void launch() {
 		Scanner input = new Scanner(System.in);
@@ -81,8 +83,11 @@ public class FilmQueryApp {
 				System.out.println("\n***** YOU DID NOT ENTER A VALID FILM ID *****");
 			} else {
 				Film film = db.findFilmById(filmId);
-				System.out.println("\n" + film.userFriendlyToString());
+				System.out.println("\n" + 1 + ": " + film.userFriendlyToString());
 				printFilmsActors(filmId);
+				List<Film> films = new ArrayList<>();
+				films.add(film);
+				subMenu(films, input);
 			}
 			break;
 		case 2:
@@ -92,10 +97,13 @@ public class FilmQueryApp {
 			if (films.size() == 0) {
 				System.out.println("\n***** NO MATCHING FILMS FOUND *****\n");
 			} else {
+				int filmNumberInList = 0;
 				for (Film film : films) {
-					System.out.println("\n" + film.userFriendlyToString() + "\n");
+					filmNumberInList++;
+					System.out.println("\n" + filmNumberInList + ": " + film.userFriendlyToString() + "\n");
 					printFilmsActors(film.getId());
 				}
+				subMenu(films, input);
 			}
 			break;
 		case 3:
@@ -104,9 +112,88 @@ public class FilmQueryApp {
 		}
 	}
 
+	private void subMenu(List<Film> films, Scanner input) {
+		int option = 0;
+		while (option != 1 && option != 2) {
+			System.out.println("PLEASE SELECT AN OPTION:");
+			System.out.println();
+			System.out.println("1) RETURN TO THE MAIN MENU");
+			System.out.println("2) VIEW ALL OF A FILM'S DETAILS");
+			System.out.println();
+			System.out.print("SELECTION >> ");
+			option = tryIntInput(option, input);
+			if (option < 1 || option > 2) {
+				System.out.println("\n***** PLEASE ENTER A VALID OPTION *****\n");
+			} else {
+				switch (option) {
+				case 1:
+					System.out.println("\n***** RETURNING TO MAIN MENU *****\n");
+					break;
+				case 2:
+					int filmInList = 0;
+					int seeAnotherFilmAnswer = 0;
+					boolean goAgain = true;
+					while (goAgain == true) {
+						System.out.println("FOR WHICH FILM WOULD YOU LIKE TO SEE ALL DETAILS?\n");
+						int filmNumberInList = 0;
+						for (Film film : films) {
+							filmNumberInList++;
+							System.out.println(filmNumberInList + ": " + film.getTitle());
+						}
+						System.out.print("\nSELECTION >> ");
+						filmInList = tryIntInput(filmInList, input);
+						if (filmInList > 0 && filmInList <= films.size()) {
+							System.out.println(films.get(filmInList - 1));
+							System.out.println();
+							printCopiesAndCondition(films.get(filmInList - 1).getId());
+							if (films.size() > 1) {
+								System.out.println("\nSEE ALL DETAILS OF ANOHTER FILM?");
+								System.out.println();
+								System.out.println("1) YES");
+								System.out.println("2) NO");
+								System.out.println();
+								System.out.print("SELECTION >> ");
+								switch (tryIntInput(seeAnotherFilmAnswer, input)) {
+								case 1:
+									continue;
+								case 2:
+									goAgain = false;
+									break;
+								}
+							} else {
+								goAgain = false;
+							}
+						} else {
+							System.out.println("\n***** PLEASE ENTER A VALID OPTION *****\n");
+						}
+					}
+					System.out.println("\n*****   RETURNING TO MAIN MENU  *****\n");
+					break;
+				}
+			}
+		}
+	}
+
+	private void printCopiesAndCondition(int filmId) {
+		List<InventoryFilm> inventoryFilms = db.findAllCopiesAndConditionOfFilm(filmId);
+		for (InventoryFilm inventoryItem : inventoryFilms) {
+			System.out.println(inventoryItem);
+		}
+	}
+
+	private int tryIntInput(int option, Scanner input) {
+		try {
+			option = input.nextInt();
+		} catch (InputMismatchException ime) {
+			input.nextLine();
+			option = 0;
+		}
+		return option;
+	}
+
 	private void printFilmsActors(int filmId) {
-		System.out.println("ACTORS INCLUDED IN THIS FILM: ");
-		List <Actor> actors = db.findActorsByFilmId(filmId);
+		System.out.println("\nINCLUDED IN THIS FILM: ");
+		List<Actor> actors = db.findActorsByFilmId(filmId);
 		for (Actor actor : actors) {
 			System.out.println(actor);
 		}

@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.InventoryFilm;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 	private static final String URL = "jdbc:mysql://localhost:3306/sdvid?useSSL=false";
@@ -43,18 +44,20 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	public Film findFilmById(int filmId) {
 		Film film = null;
 		String sql = "SELECT film.id, film.title, film.description, film.release_year,"
-				+ " language.name, film.rental_duration, film.rental_rate, film.length,"
+				+ " category.name, language.name, film.rental_duration, film.rental_rate, film.length,"
 				+ " film.replacement_cost, film.rating, film.special_features FROM film"
-				+ " JOIN language ON film.language_id = language.id WHERE film.id = ?";
+				+ " JOIN language ON film.language_id = language.id JOIN film_category ON film_category.film_id = film.id"
+				+ " JOIN category ON category.id = film_category.category_id" + " WHERE film.id = ?";
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement stmt = createPrepareStatementId(sql, conn, filmId);
 				ResultSet filmRes = stmt.executeQuery();) {
 			if (filmRes.next()) {
-				film = new Film(filmRes.getInt("id"), filmRes.getString("title"), filmRes.getString("description"),
-						filmRes.getInt("release_year"), filmRes.getString("language.name"),
-						filmRes.getInt("rental_duration"), filmRes.getDouble("rental_rate"), filmRes.getInt("length"),
-						filmRes.getDouble("replacement_cost"), filmRes.getString("rating"),
-						filmRes.getString("special_features"));
+				film = new Film(filmRes.getInt("film.id"), filmRes.getString("film.title"),
+						filmRes.getString("film.description"), filmRes.getInt("film.release_year"),
+						filmRes.getString("category.name"), filmRes.getString("language.name"),
+						filmRes.getInt("film.rental_duration"), filmRes.getDouble("film.rental_rate"),
+						filmRes.getInt("film.length"), filmRes.getDouble("film.replacement_cost"),
+						filmRes.getString("film.rating"), filmRes.getString("film.special_features"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,23 +102,54 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override
 	public List<Film> findFilmsByKeyword(String keyword) {
 		List<Film> films = new ArrayList<>();
-		String sql = "SELECT film.id, film.title, film.description, film.release_year, language.name,"
+		String sql = "SELECT film.id, film.title, film.description, film.release_year, category.name, language.name,"
 				+ " film.rental_duration, film.rental_rate, film.length, film.replacement_cost,"
-				+ " film.rating, film.special_features FROM film JOIN language "
-				+ "ON film.language_id = language.id WHERE film.title LIKE ? OR film.description LIKE ?";
+				+ " film.rating, film.special_features FROM film JOIN language"
+				+ " ON film.language_id = language.id JOIN film_category ON film_category.film_id = film.id"
+				+ " JOIN category ON category.id = film_category.category_id"
+				+ " WHERE film.title LIKE ? OR film.description LIKE ?";
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement stmt = createPrepareStatementKeyword(sql, conn, keyword);
 				ResultSet filmRes = stmt.executeQuery();) {
 			while (filmRes.next()) {
-				films.add(new Film(filmRes.getInt("id"), filmRes.getString("title"), filmRes.getString("description"),
-						filmRes.getInt("release_year"), filmRes.getString("language.name"),
-						filmRes.getInt("rental_duration"), filmRes.getDouble("rental_rate"), filmRes.getInt("length"),
-						filmRes.getDouble("replacement_cost"), filmRes.getString("rating"),
-						filmRes.getString("special_features")));
+				films.add(new Film(filmRes.getInt("film.id"), filmRes.getString("film.title"),
+						filmRes.getString("film.description"), filmRes.getInt("film.release_year"),
+						filmRes.getString("category.name"), filmRes.getString("language.name"),
+						filmRes.getInt("film.rental_duration"), filmRes.getDouble("film.rental_rate"),
+						filmRes.getInt("film.length"), filmRes.getDouble("film.replacement_cost"),
+						filmRes.getString("film.rating"), filmRes.getString("film.special_features")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return films;
+	}
+
+	@Override
+	public List<InventoryFilm> findAllCopiesAndConditionOfFilm(int filmId) {
+		List<InventoryFilm> inventoryFilms = new ArrayList<>();
+		String sql = "SELECT film.id, film.title, film.description, film.release_year, category.name, language.name,"
+				+ " film.rental_duration, film.rental_rate, film.length, film.replacement_cost,"
+				+ " film.rating, film.special_features, inventory_item.media_condition, inventory_item.id"
+				+ " FROM film JOIN language ON film.language_id = language.id"
+				+ " JOIN film_category ON film_category.film_id = film.id"
+				+ " JOIN category ON category.id = film_category.category_id"
+				+ " JOIN inventory_item ON film.id = inventory_item.film_id" + " WHERE film.id = ?";
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement stmt = createPrepareStatementId(sql, conn, filmId);
+				ResultSet filmRes = stmt.executeQuery();) {
+			while (filmRes.next()) {
+				inventoryFilms.add(new InventoryFilm(filmRes.getInt("film.id"), filmRes.getString("film.title"),
+						filmRes.getString("film.description"), filmRes.getInt("film.release_year"),
+						filmRes.getString("category.name"), filmRes.getString("language.name"),
+						filmRes.getInt("film.rental_duration"), filmRes.getDouble("film.rental_rate"),
+						filmRes.getInt("film.length"), filmRes.getDouble("film.replacement_cost"),
+						filmRes.getString("film.rating"), filmRes.getString("film.special_features"),
+						filmRes.getString("inventory_item.media_condition"), filmRes.getInt("inventory_item.id")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return inventoryFilms;
 	}
 }
