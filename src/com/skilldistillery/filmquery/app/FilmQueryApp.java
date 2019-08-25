@@ -64,11 +64,8 @@ public class FilmQueryApp {
 		String keyword = "";
 		switch (option) {
 		case 1:
-			System.out.print("\nPLEASE ENTER A FILM ID 1-1000 OR 0 TO EXIT >> ");
+			System.out.print("\nPLEASE ENTER A FILM ID 1-1000 >> ");
 			filmId = tryIntInput(filmId, input);
-			if (filmId == 0) {
-				break;
-			}
 			if (filmId < 1 || filmId > 1000) {
 				System.out.println("\n***** YOU DID NOT ENTER A VALID FILM ID *****");
 			} else {
@@ -124,7 +121,7 @@ public class FilmQueryApp {
 					int seeAnotherFilmAnswer = 0;
 					boolean goAgain = true;
 					while (goAgain == true) {
-						System.out.println("FOR WHICH FILM WOULD YOU LIKE TO SEE ALL DETAILS?\n");
+						System.out.println("WHICH FILM WOULD YOU LIKE TO SEE ALL DETAILS?\n");
 						int filmNumberInList = 0;
 						for (Film film : films) {
 							filmNumberInList++;
