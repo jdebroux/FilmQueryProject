@@ -85,8 +85,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
 		List<Actor> actors = new ArrayList<>();
-		String sql = "SELECT actor.id, CONCAT(actor.first_name, \" \", actor.last_name) AS \"Full Name\" "
-				+ "FROM actor JOIN film_actor ON film_actor.actor_id = actor.id " + "WHERE film_actor.film_id = ?";
+		String sql = "SELECT actor.id, CONCAT(actor.first_name, \" \", actor.last_name) AS \"Full Name\""
+				+ " FROM actor JOIN film_actor ON film_actor.actor_id = actor.id WHERE film_actor.film_id = ?"
+				+ " ORDER BY actor.last_name";
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement stmt = createPrepareStatementId(sql, conn, filmId);
 				ResultSet filmRes = stmt.executeQuery();) {
@@ -107,7 +108,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				+ " film.rating, film.special_features FROM film JOIN language"
 				+ " ON film.language_id = language.id JOIN film_category ON film_category.film_id = film.id"
 				+ " JOIN category ON category.id = film_category.category_id"
-				+ " WHERE film.title LIKE ? OR film.description LIKE ?";
+				+ " WHERE film.title LIKE ? OR film.description LIKE ? ORDER BY film.title";
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement stmt = createPrepareStatementKeyword(sql, conn, keyword);
 				ResultSet filmRes = stmt.executeQuery();) {
@@ -134,7 +135,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				+ " FROM film JOIN language ON film.language_id = language.id"
 				+ " JOIN film_category ON film_category.film_id = film.id"
 				+ " JOIN category ON category.id = film_category.category_id"
-				+ " JOIN inventory_item ON film.id = inventory_item.film_id" + " WHERE film.id = ?";
+				+ " JOIN inventory_item ON film.id = inventory_item.film_id WHERE film.id = ?"
+				+ " ORDER BY inventory_item.media_condition";
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement stmt = createPrepareStatementId(sql, conn, filmId);
 				ResultSet filmRes = stmt.executeQuery();) {

@@ -121,17 +121,17 @@ public class Film {
 
 	@Override
 	public String toString() {
-		String upperTS = "Film [ID: " + id + ", Title: " + title + ", Description: " + description + ", Release Year: "
+		String upperTS = "FILM ID: " + id + ", Title: " + title + ", Description: " + description + ", Release Year: "
 				+ releaseYear + ", Category: " + category + ", Language: " + language + ", Rental Duration: "
 				+ rentalDuration + ", Rental Rate: " + rentalRate + ", Length: " + length + ", Replacement Cost: "
-				+ replacementCost + ", Rating: " + rating + ", Special Features: " + specialFeatures + "]";
+				+ replacementCost + ", Rating: " + rating + ", Special Features: " + specialFeatures;
 		upperTS = upperTS.toUpperCase();
 		return upperTS;
 	}
 
 	public String userFriendlyToString() {
-		String upperUFTS = "Film [Title: " + title + ", Release Year: " + releaseYear + ", Rating: " + rating
-				+ ", Language: " + language + ", Description: " + description + "]";
+		String upperUFTS = "Title: " + title + ", Release Year: " + releaseYear + ", Rating: " + rating
+				+ ", Language: " + language + ", Description: " + description;
 		upperUFTS = upperUFTS.toUpperCase();
 		return upperUFTS;
 	}

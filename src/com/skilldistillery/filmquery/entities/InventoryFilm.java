@@ -15,7 +15,7 @@ public class InventoryFilm extends Film {
 
 	@Override
 	public String toString() {
-		String toString = "Inventory ID: " + inventoryId + ", Film: " + InventoryFilm.super.getTitle() + ", condition: " + condition + "]";
+		String toString = "Inventory ID: " + inventoryId + ", Film TITLE: " + InventoryFilm.super.getTitle() + ", condition: " + condition;
 		toString = toString.toUpperCase();
 		return toString;
 	}

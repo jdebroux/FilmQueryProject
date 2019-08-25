@@ -71,7 +71,7 @@ public class FilmQueryApp {
 			} else {
 				Film film = db.findFilmById(filmId);
 				System.out.println("\n" + 1 + ": " + film.userFriendlyToString());
-				printFilmsActors(filmId);
+				printFilmsActors(filmId, 1);
 				List<Film> films = new ArrayList<>();
 				films.add(film);
 				subMenu(films, input);
@@ -87,8 +87,8 @@ public class FilmQueryApp {
 				int filmNumberInList = 0;
 				for (Film film : films) {
 					filmNumberInList++;
-					System.out.println("\n" + filmNumberInList + ": " + film.userFriendlyToString() + "\n");
-					printFilmsActors(film.getId());
+					System.out.println("\n" + filmNumberInList + ": " + film.userFriendlyToString());
+					printFilmsActors(film.getId(), filmNumberInList);
 				}
 				subMenu(films, input);
 			}
@@ -178,12 +178,27 @@ public class FilmQueryApp {
 		return option;
 	}
 
-	private void printFilmsActors(int filmId) {
-		System.out.println("\nINCLUDED IN THIS FILM: ");
+	private void printFilmsActors(int filmId, int filmNumberInList) {
+		int i = 0;
+		String actorsInFilm = "   ACTORS IN FILM: ";
+		if (filmNumberInList < 10) {
+			System.out.print(actorsInFilm);
+		} else if (filmNumberInList > 9 && filmNumberInList < 100) {
+			System.out.print(" " + actorsInFilm);
+		} else if (filmNumberInList > 99 && filmNumberInList < 1000) {
+			System.out.print("  " + actorsInFilm);
+		} else {
+			System.out.print("   " + actorsInFilm);
+		}
 		List<Actor> actors = db.findActorsByFilmId(filmId);
 		for (Actor actor : actors) {
-			System.out.println(actor);
+			if (i == actors.size() - 1) {
+				System.out.print(actor);
+			} else {
+				System.out.print(actor + ", ");
+			}
+			i++;
 		}
-		System.out.println();
+		System.out.println("\n");
 	}
 }

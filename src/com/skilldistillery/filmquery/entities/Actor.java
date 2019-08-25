@@ -71,7 +71,7 @@ public class Actor {
 		if (firstName != null) {
 			output += "Actor [ID: " + id + ", First Name: " + firstName + ", Last Name: " + lastName + "]";
 		}else {
-			output += "Actor [ID: " + id + ", Name: " + fullName + "]";
+			output += fullName;
 		}
 		output = output.toUpperCase();
 		return output;
