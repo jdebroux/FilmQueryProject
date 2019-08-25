@@ -13,9 +13,11 @@ In this command-line app, you will be able to search through a database to find 
 * Rating
 * Language
 * Description
+* Category
 * A list of the actors
+* A list of all the copies of that title and their condition
 
-If you want more information about the film there is a sub-menu to get it, once a film is found.
+If you want more information about the film there is a sub-menu to get it, once a film is found.  I also edited the toString methods to make things more user friendly in terms of readability.  I also created a specific method just for the try/catch statements around a user inputing an integer since it happens more than a couple times throughout this project.
 
 ### Technologies Used
 
@@ -41,9 +43,7 @@ In starting this app, I first looked at the ERD and figured out which statements
 
 Stretch goals I worked on:
 
-* Added a sub-menu so the user could choose how much information they wanted to see.
-* 
-
-### Wishlist Additions
-
-*
+* Added a sub-menu so the user could choose how much information they wanted to see
+* Added the films category to the printed description
+* When viewing film details, the user sees all copies of that film and their condition
+* Writing J-Unit tests for each of the methods that search the database

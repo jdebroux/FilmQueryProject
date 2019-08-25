@@ -51,12 +51,7 @@ public class FilmQueryApp {
 			System.out.println("3) QUIT ");
 			System.out.println();
 			System.out.print("SELECTION >> ");
-			try {
-				option = input.nextInt();
-			} catch (InputMismatchException ime) {
-				input.nextLine();
-				option = 0;
-			}
+			option = tryIntInput(option, input);
 			if (option < 1 || option > 3) {
 				System.out.println("\n***** PLEASE ENTER A VALID OPTION *****\n");
 			}
@@ -70,12 +65,7 @@ public class FilmQueryApp {
 		switch (option) {
 		case 1:
 			System.out.print("\nPLEASE ENTER A FILM ID 1-1000 OR 0 TO EXIT >> ");
-			try {
-				filmId = input.nextInt();
-			} catch (InputMismatchException ime) {
-				input.nextLine();
-				filmId = 0;
-			}
+			filmId = tryIntInput(filmId, input);
 			if (filmId == 0) {
 				break;
 			}
