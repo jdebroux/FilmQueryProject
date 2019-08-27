@@ -64,18 +64,19 @@ public class FilmQueryApp {
 		String keyword = "";
 		switch (option) {
 		case 1:
-			System.out.print("\nPLEASE ENTER A FILM ID 1-1000 >> ");
+			System.out.print("\nPLEASE ENTER A FILM ID >> ");
 			filmId = tryIntInput(filmId, input);
-			if (filmId < 1 || filmId > 1000) {
-				System.out.println("\n***** YOU DID NOT ENTER A VALID FILM ID *****");
-			} else {
-				Film film = db.findFilmById(filmId);
-				System.out.println("\n" + 1 + ": " + film.userFriendlyToString());
+			
+				Film film1 = db.findFilmById(filmId);
+				if (film1 == null) {
+					System.out.println("\n***** YOU DID NOT ENTER A VALID FILM ID *****");
+				}else {
+				System.out.println("\n" + 1 + ": " + film1.userFriendlyToString());
 				printFilmsActors(filmId, 1);
 				List<Film> films = new ArrayList<>();
-				films.add(film);
+				films.add(film1);
 				subMenu(films, input);
-			}
+				}
 			break;
 		case 2:
 			System.out.print("\nSEARCH KEYWORD TO LOOK UP FILM >> ");

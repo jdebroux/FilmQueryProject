@@ -39,7 +39,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		stmt.setString(2, keyword);
 		return stmt;
 	}
-
+	
 	@Override
 	public Film findFilmById(int filmId) {
 		Film film = null;
@@ -47,7 +47,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				+ " category.name, language.name, film.rental_duration, film.rental_rate, film.length,"
 				+ " film.replacement_cost, film.rating, film.special_features FROM film"
 				+ " JOIN language ON film.language_id = language.id JOIN film_category ON film_category.film_id = film.id"
-				+ " JOIN category ON category.id = film_category.category_id" + " WHERE film.id = ?";
+				+ " JOIN category ON category.id = film_category.category_id WHERE film.id = ?";
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement stmt = createPrepareStatementId(sql, conn, filmId);
 				ResultSet filmRes = stmt.executeQuery();) {
@@ -68,7 +68,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override
 	public Actor findActorById(int actorId) {
 		Actor actor = null;
-		String sql = "SELECT actor.id, actor.first_name, actor.last_name" + " FROM actor WHERE actor.id = ?";
+		String sql = "SELECT actor.id, actor.first_name, actor.last_name FROM actor WHERE actor.id = ?";
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement stmt = createPrepareStatementId(sql, conn, actorId);
 				ResultSet filmRes = stmt.executeQuery();) {
